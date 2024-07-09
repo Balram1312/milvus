@@ -1,0 +1,1 @@
+pip install pymilvus==2.2.11
