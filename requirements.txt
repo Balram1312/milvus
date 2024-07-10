@@ -1,1 +1,5 @@
 pip install pymilvus==2.2.11
+
+docker pull milvusdb/milvus:latest
+
+docker run -d --name milvus -p 19530:19530 milvusdb/milvus:latest
