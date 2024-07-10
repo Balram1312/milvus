@@ -1,6 +1,6 @@
 # main.py
 from pymilvus import connections, FieldSchema, CollectionSchema, DataType, Collection
-from animal_embeddings import lion_features, tiger_features, elephant_features, giraffe_features, zebra_features
+from animal_embedding import lion_features, tiger_features, elephant_features, giraffe_features, zebra_features
 
 # Connect to Milvus
 connections.connect("default", host="localhost", port="19530")
