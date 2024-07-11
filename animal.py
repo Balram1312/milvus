@@ -5,30 +5,30 @@ from pymilvus import (
     Collection,
     utility
 )
+from animal_embedding import *
 
+# Milvus connection parameters
 _HOST = '127.0.0.1'
 _PORT = '19530'
 
+# Collection parameters
 _COLLECTION_NAME = 'animal_collection'
 _ID_FIELD_NAME = 'id_field'
 _VECTOR_FIELD_NAME = 'vector_field'
 
-_DIM = 4  # Dimension of the vectors
+# Vector parameters
+_DIM = len(next(iter(animal_vectors().values())))  # Dimension of the vectors
 _INDEX_FILE_SIZE = 32
 
+# Index parameters
 _METRIC_TYPE = 'L2'
 _INDEX_TYPE = 'IVF_FLAT'
 _NLIST = 1024
 _NPROBE = 16
 _TOPK = 3
 
-animal_vectors = {
-    'tiger': [0.2, 0.8, 0.5, 0.1],
-    'lion': [0.3, 0.7, 0.6, 0.2],
-    'giraffe': [0.5, 0.1, 0.9, 0.3],
-    'alligator': [0.6, 0.2, 0.7, 0.4],
-    'deer': [0.1, 0.9, 0.4, 0.5]
-}
+# Import animal embeddings
+from animal_embedding import *
 
 def create_connection():
     print("\nCreating connection...")
@@ -59,8 +59,8 @@ def list_collections():
 
 def insert_animals(collection):
     data = [
-        [i for i in range(len(animal_vectors))],
-        [vector for vector in animal_vectors.values()],
+        [i for i in range(len(animal_vectors()))],
+        [vector for vector in animal_vectors().values()],
     ]
     collection.insert(data)
     return data[1]
@@ -90,7 +90,7 @@ def release_collection(collection):
     collection.release()
 
 def search_similar_animal(collection, vector_field, id_field, animal_name):
-    search_vector = animal_vectors[animal_name]
+    search_vector = animal_vectors()[animal_name]
     search_param = {
         "data": [search_vector],
         "anns_field": vector_field,
@@ -102,7 +102,7 @@ def search_similar_animal(collection, vector_field, id_field, animal_name):
     print(f"\nSimilar animals to '{animal_name}':")
     for result in results[0]:
         similar_animal_id = result.id
-        similar_animal_name = list(animal_vectors.keys())[similar_animal_id]
+        similar_animal_name = list(animal_vectors().keys())[similar_animal_id]
         print(f"- {similar_animal_name}")
 
 def set_properties(collection):
